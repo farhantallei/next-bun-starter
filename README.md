@@ -95,11 +95,26 @@ bun test
 
 ## 🩺 Health Check
 
-A health check script is included to verify application readiness.
+A health check endpoint and script are included to verify application readiness and server stats.
+
+**Run the script via Bun CLI**:
 
 ```bash
 bun healthcheck
 ```
+
+Or access the API endpoint in the browser or via HTTP request:
+
+```bash
+GET /api/healthcheck
+```
+
+**Provides**:
+- Bun version & revision
+- Uptime (formatted)
+- CPU usage & cores
+- Total system memory
+- Platform, architecture, and process ID
 
 Useful for CI/CD pipelines, container health probes, or uptime monitoring.
 
