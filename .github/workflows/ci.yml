@@ -24,11 +24,11 @@ jobs:
 
       - name: Lint & Format Check
         run: |
-          biome check
-          biome check --write
+          bun run lint
+          bun run format
 
       - name: Run Tests
         run: bun test
 
       - name: Build Application
-        run: bun --bun next build
+        run: bun build
