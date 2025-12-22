@@ -1,36 +1,170 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next Bun Starter – Next.js Boilerplate
 
-## Getting Started
+![Bun](https://img.shields.io/badge/Bun-1.3.5-black)
+![Next.js](https://img.shields.io/badge/Next.js-16.1.0-black)
+![React](https://img.shields.io/badge/React-19-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-v4-38bdf8)
+![License](https://img.shields.io/badge/license-private-red)
 
-First, run the development server:
+A modern **Next.js boilerplate** powered by **Bun** as the runtime. This project is designed for speed, maintainability, and a great developer experience, with UI, testing, linting, and health checks preconfigured.
+
+---
+
+## ✨ Features
+
+- ⚡ **Bun Runtime** (v1.3.5)
+- 🚀 **Next.js 16.1.0**
+- ⚛ **React 19**
+- 🎨 **Tailwind CSS v4**
+- 🧩 **shadcn/ui**
+- 🧱 **Base UI** (accessible UI primitives)
+- 🖼 **Hugeicons** icon library
+- 🧪 **Testing setup** with Bun Test + Testing Library + Happy DOM
+- 🩺 **Health check script**
+- 🧹 **Biome** for linting and formatting
+- 🛠 Fully **TypeScript** ready
+
+---
+
+## 🧰 Tech Stack
+
+| Category | Technology |
+|--------|------------|
+| Runtime | Bun `1.3.5` |
+| Framework | Next.js `16.1.0` |
+| UI Components | shadcn/ui, Base UI, coss ui |
+| Icons | Hugeicons |
+| Styling | Tailwind CSS v4 |
+| Testing | Bun Test, Testing Library, Happy DOM |
+| Lint & Format | Biome |
+| Language | TypeScript |
+
+
+---
+
+## 🚀 Getting Started
+
+### Install dependencies
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+bun install
+```
+
+### Start development server
+
+```bash
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application will be available at:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🏗 Build & Production
 
-To learn more about Next.js, take a look at the following resources:
+### Build the application
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+bun build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Start the production server
 
-## Deploy on Vercel
+```bash
+bun start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🧪 Testing
+
+This project uses Bun Test as the test runner, with Testing Library and Happy DOM for DOM-based testing.
+
+Run tests with:
+
+```bash
+bun test
+```
+
+---
+
+## 🩺 Health Check
+
+A health check script is included to verify application readiness.
+
+```bash
+bun healthcheck
+```
+
+Useful for CI/CD pipelines, container health probes, or uptime monitoring.
+
+---
+
+## 🧹 Linting & Formatting
+
+### Lint code
+
+```bash
+bun lint
+```
+
+### Format code (safe)
+
+```bash
+bun format
+```
+
+### Format code (unsafe)
+
+```bash
+bun format:unsafe
+```
+
+---
+
+## 🧼 Cleanup
+
+Remove build artifacts:
+
+```bash
+bun clean
+```
+
+Remove build artifacts and dependencies:
+
+```bash
+bun clean:node_modules
+```
+
+---
+
+## 📁 Project Structure (High-level)
+
+```
+.
+├── app/                # Next.js App Router
+├── components/         # Shared UI components
+├── lib/                # Utility functions
+├── public/             # Static assets
+├── scripts/            # Utility scripts (healthcheck)
+├── test/               # Test setup
+└── types/              # TypeScript type definitions
+```
+
+---
+
+## 🔐 Notes
+
+- Some native dependencies are marked as trusted dependencies
+- Certain install scripts are ignored to ensure faster and safer installs with Bun
+
+---
+
+## 📄 License
+
+This project is private and not licensed for public distribution.
