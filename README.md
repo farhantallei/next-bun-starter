@@ -106,7 +106,7 @@ bun healthcheck
 Or access the API endpoint in the browser or via HTTP request:
 
 ```bash
-GET /api/healthcheck
+GET /api/health
 ```
 
 **Provides**:
