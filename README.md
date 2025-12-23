@@ -5,7 +5,7 @@
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat&logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-v4-38BDF8?style=flat&logo=tailwind-css&logoColor=white)
-![License](https://img.shields.io/badge/License-Private-DC2626?style=flat&logo=github&logoColor=white)
+<!-- ![License](https://img.shields.io/badge/License-Private-DC2626?style=flat&logo=github&logoColor=white) -->
 
 A modern **Next.js boilerplate** powered by **Bun** as the runtime. This project is designed for speed, maintainability, and a great developer experience, with UI, testing, linting, health checks, and structured logging preconfigured.
 
@@ -217,8 +217,8 @@ bun clean:node_modules
 - Some native dependencies are marked as trusted dependencies
 - Certain install scripts are ignored to ensure faster and safer installs with Bun
 
----
-
-## 📄 License
-
-This project is private and not licensed for public distribution.
+<!-- --- -->
+<!---->
+<!-- ## 📄 License -->
+<!---->
+<!-- This project is private and not licensed for public distribution. -->
