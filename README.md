@@ -1,11 +1,11 @@
 # Next Bun Starter – Next.js Boilerplate
 
-![Bun](https://img.shields.io/badge/Bun-1.3.5-FEA500?style=for-the-badge&logo=bun&logoColor=white)
-![Next.js](https://img.shields.io/badge/Next.js-16.1.0-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
-![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-v4-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![License](https://img.shields.io/badge/License-Private-DC2626?style=for-the-badge&logo=github&logoColor=white)
+![Bun](https://img.shields.io/badge/Bun-000000?style=flat&logo=bun&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-38BDF8?style=flat&logo=tailwind-css&logoColor=white)
+![License](https://img.shields.io/badge/License-DC2626?style=flat&logo=github&logoColor=white)
 
 A modern **Next.js boilerplate** powered by **Bun** as the runtime. This project is designed for speed, maintainability, and a great developer experience, with UI, testing, linting, health checks, and structured logging preconfigured.
 
