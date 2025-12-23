@@ -21,7 +21,8 @@ A modern **Next.js boilerplate** powered by **Bun** as the runtime. This project
 - 🧱 **Base UI** (accessible UI primitives)
 - 🖼 **Hugeicons** icon library
 - 🧪 **Testing setup** with Bun Test + Testing Library + Happy DOM
-- 🩺 **Health check script**
+- 🩺 **Health check script & endpoint**
+- 📝 **Structured logging** with Winston (env-driven, optional request ID)
 - 🧹 **Biome** for linting and formatting
 - 🛠 Fully **TypeScript** ready
 
@@ -38,6 +39,7 @@ A modern **Next.js boilerplate** powered by **Bun** as the runtime. This project
 | Styling | Tailwind CSS v4 |
 | Testing | Bun Test, Testing Library, Happy DOM |
 | Lint & Format | Biome |
+| Logging | Winston (env-driven) |
 | Language | TypeScript |
 
 
@@ -117,6 +119,43 @@ GET /api/health
 - Platform, architecture, and process ID
 
 Useful for CI/CD pipelines, container health probes, or uptime monitoring.
+
+---
+
+## 📝 Logger
+
+This project uses **Winston** for structured, colorful, and configurable logging.
+
+**Features**:
+
+- **Environment-driven log level** (`LOG_LEVEL`), e.g., `debug`, `info`, `warn`, `error`
+- **Console logging** with colors for development
+- **Optional request tracing** via `requestId` in API routes
+
+**Usage example in route handlers or scripts**:
+
+```ts
+import { logger } from "@/lib/logger";
+
+logger.info("Healthcheck requested", { requestId: "req_12345" });
+logger.warn("High memory usage detected");
+logger.error("Failed to connect to database", { code: "DB_CONN_ERR" });
+```
+
+**Environment setup**:
+
+```bash
+# Local development
+LOG_LEVEL=debug bun dev
+
+# CI
+LOG_LEVEL=info
+
+# Production
+LOG_LEVEL=warn bun start
+```
+
+> This logging setup allows easy debugging in development and structured, searchable logs in production. Request IDs can be used to trace logs for individual requests.
 
 ---
 
