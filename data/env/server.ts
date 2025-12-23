@@ -6,8 +6,6 @@ export const env = createEnv({
     LOG_LEVEL: z
       .enum(["error", "warn", "info", "http", "verbose", "debug", "silly"])
       .default("info"),
-
-    DATABASE_URL: z.url(),
   },
   emptyStringAsUndefined: true,
   experimental__runtimeEnv: process.env,
