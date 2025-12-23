@@ -7,7 +7,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-v4-38bdf8)
 ![License](https://img.shields.io/badge/license-private-red)
 
-A modern **Next.js boilerplate** powered by **Bun** as the runtime. This project is designed for speed, maintainability, and a great developer experience, with UI, testing, linting, and health checks preconfigured.
+A modern **Next.js boilerplate** powered by **Bun** as the runtime. This project is designed for speed, maintainability, and a great developer experience, with UI, testing, linting, health checks, and structured logging preconfigured.
 
 ---
 
@@ -203,7 +203,7 @@ bun clean:node_modules
 .
 ├── app/                # Next.js App Router
 ├── components/         # Shared UI components
-├── lib/                # Utility functions
+├── lib/                # Utility functions (logger, utils, etc.)
 ├── public/             # Static assets
 ├── scripts/            # Utility scripts (healthcheck)
 ├── test/               # Test setup
