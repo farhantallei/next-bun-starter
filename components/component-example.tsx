@@ -1,7 +1,6 @@
 "use client"
 
 import {
-  BluetoothIcon,
   CodeIcon,
   ComputerIcon,
   CreditCardIcon,
@@ -36,13 +35,11 @@ import * as React from "react"
 import { Example, ExampleWrapper } from "@/components/example"
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
+  AlertDialogClose,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogMedia,
+  AlertDialogPopup,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
@@ -59,31 +56,32 @@ import {
 } from "@/components/ui/card"
 import {
   Combobox,
-  ComboboxContent,
   ComboboxEmpty,
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
+  ComboboxPopup,
 } from "@/components/ui/combobox"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { Field, FieldError, FieldLabel } from "@/components/ui/field"
+import { Form } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import {
+  Menu,
+  MenuCheckboxItem,
+  MenuGroup,
+  MenuGroupLabel,
+  MenuItem,
+  MenuPopup,
+  MenuPortal,
+  MenuRadioGroup,
+  MenuRadioItem,
+  MenuSeparator,
+  MenuShortcut,
+  MenuSub,
+  MenuSubPopup,
+  MenuSubTrigger,
+  MenuTrigger,
+} from "@/components/ui/menu"
 import {
   Select,
   SelectContent,
@@ -134,11 +132,8 @@ function CardExample() {
               />
               Show Dialog
             </AlertDialogTrigger>
-            <AlertDialogContent size="sm">
+            <AlertDialogPopup>
               <AlertDialogHeader>
-                <AlertDialogMedia>
-                  <HugeiconsIcon icon={BluetoothIcon} strokeWidth={2} />
-                </AlertDialogMedia>
                 <AlertDialogTitle>Allow accessory to connect?</AlertDialogTitle>
                 <AlertDialogDescription>
                   Do you want to allow the USB accessory to connect to this
@@ -146,10 +141,12 @@ function CardExample() {
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Don&apos;t allow</AlertDialogCancel>
-                <AlertDialogAction>Allow</AlertDialogAction>
+                <AlertDialogClose render={<Button variant="ghost" />}>
+                  Don&apos;t allow
+                </AlertDialogClose>
+                <Button>Allow</Button>
               </AlertDialogFooter>
-            </AlertDialogContent>
+            </AlertDialogPopup>
           </AlertDialog>
           <Badge className="ml-auto" variant="secondary">
             Warning
@@ -176,6 +173,10 @@ const roleItems = [
 ]
 
 function FormExample() {
+  const [view, setView] = React.useState({
+    sidebar: true,
+    statusBar: false,
+  })
   const [notifications, setNotifications] = React.useState({
     email: true,
     sms: false,
@@ -190,207 +191,191 @@ function FormExample() {
           <CardTitle>User Information</CardTitle>
           <CardDescription>Please fill in your details below</CardDescription>
           <CardAction>
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                render={<Button size="icon" variant="ghost" />}
-              >
+            <Menu>
+              <MenuTrigger render={<Button size="icon" variant="ghost" />}>
                 <HugeiconsIcon
                   icon={MoreVerticalCircle01Icon}
                   strokeWidth={2}
                 />
                 <span className="sr-only">More options</span>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuGroup>
-                  <DropdownMenuLabel>File</DropdownMenuLabel>
-                  <DropdownMenuItem>
+              </MenuTrigger>
+              <MenuPopup align="end" className="w-56">
+                <MenuGroup>
+                  <MenuGroupLabel>File</MenuGroupLabel>
+                  <MenuItem>
                     <HugeiconsIcon icon={FileIcon} strokeWidth={2} />
                     New File
-                    <DropdownMenuShortcut>⌘N</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
+                    <MenuShortcut>⌘N</MenuShortcut>
+                  </MenuItem>
+                  <MenuItem>
                     <HugeiconsIcon icon={FolderIcon} strokeWidth={2} />
                     New Folder
-                    <DropdownMenuShortcut>⇧⌘N</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger>
+                    <MenuShortcut>⇧⌘N</MenuShortcut>
+                  </MenuItem>
+                  <MenuSub>
+                    <MenuSubTrigger>
                       <HugeiconsIcon icon={FolderOpenIcon} strokeWidth={2} />
                       Open Recent
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                      <DropdownMenuSubContent>
-                        <DropdownMenuGroup>
-                          <DropdownMenuLabel>Recent Projects</DropdownMenuLabel>
-                          <DropdownMenuItem>
+                    </MenuSubTrigger>
+                    <MenuPortal>
+                      <MenuSubPopup>
+                        <MenuGroup>
+                          <MenuGroupLabel>Recent Projects</MenuGroupLabel>
+                          <MenuItem>
                             <HugeiconsIcon icon={CodeIcon} strokeWidth={2} />
                             Project Alpha
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          </MenuItem>
+                          <MenuItem>
                             <HugeiconsIcon icon={CodeIcon} strokeWidth={2} />
                             Project Beta
-                          </DropdownMenuItem>
-                          <DropdownMenuSub>
-                            <DropdownMenuSubTrigger>
+                          </MenuItem>
+                          <MenuSub>
+                            <MenuSubTrigger>
                               <HugeiconsIcon
                                 icon={MoreHorizontalCircle01Icon}
                                 strokeWidth={2}
                               />
                               More Projects
-                            </DropdownMenuSubTrigger>
-                            <DropdownMenuPortal>
-                              <DropdownMenuSubContent>
-                                <DropdownMenuItem>
+                            </MenuSubTrigger>
+                            <MenuPortal>
+                              <MenuSubPopup>
+                                <MenuItem>
                                   <HugeiconsIcon
                                     icon={CodeIcon}
                                     strokeWidth={2}
                                   />
                                   Project Gamma
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
+                                </MenuItem>
+                                <MenuItem>
                                   <HugeiconsIcon
                                     icon={CodeIcon}
                                     strokeWidth={2}
                                   />
                                   Project Delta
-                                </DropdownMenuItem>
-                              </DropdownMenuSubContent>
-                            </DropdownMenuPortal>
-                          </DropdownMenuSub>
-                        </DropdownMenuGroup>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuGroup>
-                          <DropdownMenuItem>
+                                </MenuItem>
+                              </MenuSubPopup>
+                            </MenuPortal>
+                          </MenuSub>
+                        </MenuGroup>
+                        <MenuSeparator />
+                        <MenuGroup>
+                          <MenuItem>
                             <HugeiconsIcon icon={SearchIcon} strokeWidth={2} />
                             Browse...
-                          </DropdownMenuItem>
-                        </DropdownMenuGroup>
-                      </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                          </MenuItem>
+                        </MenuGroup>
+                      </MenuSubPopup>
+                    </MenuPortal>
+                  </MenuSub>
+                  <MenuSeparator />
+                  <MenuItem>
                     <HugeiconsIcon icon={FloppyDiskIcon} strokeWidth={2} />
                     Save
-                    <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
+                    <MenuShortcut>⌘S</MenuShortcut>
+                  </MenuItem>
+                  <MenuItem>
                     <HugeiconsIcon icon={DownloadIcon} strokeWidth={2} />
                     Export
-                    <DropdownMenuShortcut>⇧⌘E</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuLabel>View</DropdownMenuLabel>
-                  <DropdownMenuCheckboxItem
-                    checked={notifications.email}
+                    <MenuShortcut>⇧⌘E</MenuShortcut>
+                  </MenuItem>
+                </MenuGroup>
+                <MenuSeparator />
+                <MenuGroup>
+                  <MenuGroupLabel>View</MenuGroupLabel>
+                  <MenuCheckboxItem
+                    checked={view.sidebar}
                     onCheckedChange={(checked) =>
-                      setNotifications({
-                        ...notifications,
-                        email: checked === true,
+                      setView({
+                        ...view,
+                        sidebar: checked === true,
                       })
                     }
                   >
-                    <HugeiconsIcon icon={EyeIcon} strokeWidth={2} />
                     Show Sidebar
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    checked={notifications.sms}
+                  </MenuCheckboxItem>
+                  <MenuCheckboxItem
+                    checked={view.statusBar}
                     onCheckedChange={(checked) =>
-                      setNotifications({
-                        ...notifications,
-                        sms: checked === true,
+                      setView({
+                        ...view,
+                        statusBar: checked === true,
                       })
                     }
                   >
-                    <HugeiconsIcon icon={LayoutIcon} strokeWidth={2} />
                     Show Status Bar
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger>
+                  </MenuCheckboxItem>
+                  <MenuSub>
+                    <MenuSubTrigger>
                       <HugeiconsIcon icon={PaintBoardIcon} strokeWidth={2} />
                       Theme
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                      <DropdownMenuSubContent>
-                        <DropdownMenuGroup>
-                          <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-                          <DropdownMenuRadioGroup
+                    </MenuSubTrigger>
+                    <MenuPortal>
+                      <MenuSubPopup>
+                        <MenuGroup>
+                          <MenuGroupLabel>Appearance</MenuGroupLabel>
+                          <MenuRadioGroup
                             onValueChange={setTheme}
                             value={theme}
                           >
-                            <DropdownMenuRadioItem value="light">
-                              <HugeiconsIcon icon={SunIcon} strokeWidth={2} />
-                              Light
-                            </DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="dark">
-                              <HugeiconsIcon icon={MoonIcon} strokeWidth={2} />
-                              Dark
-                            </DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="system">
-                              <HugeiconsIcon
-                                icon={ComputerIcon}
-                                strokeWidth={2}
-                              />
-                              System
-                            </DropdownMenuRadioItem>
-                          </DropdownMenuRadioGroup>
-                        </DropdownMenuGroup>
-                      </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuLabel>Account</DropdownMenuLabel>
-                  <DropdownMenuItem>
+                            <MenuRadioItem value="light">Light</MenuRadioItem>
+                            <MenuRadioItem value="dark">Dark</MenuRadioItem>
+                            <MenuRadioItem value="system">System</MenuRadioItem>
+                          </MenuRadioGroup>
+                        </MenuGroup>
+                      </MenuSubPopup>
+                    </MenuPortal>
+                  </MenuSub>
+                </MenuGroup>
+                <MenuSeparator />
+                <MenuGroup>
+                  <MenuGroupLabel>Account</MenuGroupLabel>
+                  <MenuItem>
                     <HugeiconsIcon icon={UserIcon} strokeWidth={2} />
                     Profile
-                    <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
+                    <MenuShortcut>⇧⌘P</MenuShortcut>
+                  </MenuItem>
+                  <MenuItem>
                     <HugeiconsIcon icon={CreditCardIcon} strokeWidth={2} />
                     Billing
-                  </DropdownMenuItem>
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger>
+                  </MenuItem>
+                  <MenuSub>
+                    <MenuSubTrigger>
                       <HugeiconsIcon icon={SettingsIcon} strokeWidth={2} />
                       Settings
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                      <DropdownMenuSubContent>
-                        <DropdownMenuGroup>
-                          <DropdownMenuLabel>Preferences</DropdownMenuLabel>
-                          <DropdownMenuItem>
+                    </MenuSubTrigger>
+                    <MenuPortal>
+                      <MenuSubPopup>
+                        <MenuGroup>
+                          <MenuGroupLabel>Preferences</MenuGroupLabel>
+                          <MenuItem>
                             <HugeiconsIcon
                               icon={KeyboardIcon}
                               strokeWidth={2}
                             />
                             Keyboard Shortcuts
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          </MenuItem>
+                          <MenuItem>
                             <HugeiconsIcon
                               icon={LanguageCircleIcon}
                               strokeWidth={2}
                             />
                             Language
-                          </DropdownMenuItem>
-                          <DropdownMenuSub>
-                            <DropdownMenuSubTrigger>
+                          </MenuItem>
+                          <MenuSub>
+                            <MenuSubTrigger>
                               <HugeiconsIcon
                                 icon={NotificationIcon}
                                 strokeWidth={2}
                               />
                               Notifications
-                            </DropdownMenuSubTrigger>
-                            <DropdownMenuPortal>
-                              <DropdownMenuSubContent>
-                                <DropdownMenuGroup>
-                                  <DropdownMenuLabel>
+                            </MenuSubTrigger>
+                            <MenuPortal>
+                              <MenuSubPopup>
+                                <MenuGroup>
+                                  <MenuGroupLabel>
                                     Notification Types
-                                  </DropdownMenuLabel>
-                                  <DropdownMenuCheckboxItem
+                                  </MenuGroupLabel>
+                                  <MenuCheckboxItem
                                     checked={notifications.push}
                                     onCheckedChange={(checked) =>
                                       setNotifications({
@@ -399,13 +384,9 @@ function FormExample() {
                                       })
                                     }
                                   >
-                                    <HugeiconsIcon
-                                      icon={NotificationIcon}
-                                      strokeWidth={2}
-                                    />
                                     Push Notifications
-                                  </DropdownMenuCheckboxItem>
-                                  <DropdownMenuCheckboxItem
+                                  </MenuCheckboxItem>
+                                  <MenuCheckboxItem
                                     checked={notifications.email}
                                     onCheckedChange={(checked) =>
                                       setNotifications({
@@ -414,118 +395,114 @@ function FormExample() {
                                       })
                                     }
                                   >
-                                    <HugeiconsIcon
-                                      icon={MailIcon}
-                                      strokeWidth={2}
-                                    />
                                     Email Notifications
-                                  </DropdownMenuCheckboxItem>
-                                </DropdownMenuGroup>
-                              </DropdownMenuSubContent>
-                            </DropdownMenuPortal>
-                          </DropdownMenuSub>
-                        </DropdownMenuGroup>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuGroup>
-                          <DropdownMenuItem>
+                                  </MenuCheckboxItem>
+                                </MenuGroup>
+                              </MenuSubPopup>
+                            </MenuPortal>
+                          </MenuSub>
+                        </MenuGroup>
+                        <MenuSeparator />
+                        <MenuGroup>
+                          <MenuItem>
                             <HugeiconsIcon icon={ShieldIcon} strokeWidth={2} />
                             Privacy & Security
-                          </DropdownMenuItem>
-                        </DropdownMenuGroup>
-                      </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
+                          </MenuItem>
+                        </MenuGroup>
+                      </MenuSubPopup>
+                    </MenuPortal>
+                  </MenuSub>
+                </MenuGroup>
+                <MenuSeparator />
+                <MenuGroup>
+                  <MenuItem>
                     <HugeiconsIcon icon={HelpCircleIcon} strokeWidth={2} />
                     Help & Support
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  </MenuItem>
+                  <MenuItem>
                     <HugeiconsIcon icon={File01Icon} strokeWidth={2} />
                     Documentation
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem variant="destructive">
+                  </MenuItem>
+                </MenuGroup>
+                <MenuSeparator />
+                <MenuGroup>
+                  <MenuItem variant="destructive">
                     <HugeiconsIcon icon={LogoutIcon} strokeWidth={2} />
                     Sign Out
-                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                    <MenuShortcut>⇧⌘Q</MenuShortcut>
+                  </MenuItem>
+                </MenuGroup>
+              </MenuPopup>
+            </Menu>
           </CardAction>
         </CardHeader>
         <CardContent>
-          <form>
-            <FieldGroup>
-              <div className="grid grid-cols-2 gap-4">
-                <Field>
-                  <FieldLabel htmlFor="small-form-name">Name</FieldLabel>
-                  <Input
-                    id="small-form-name"
-                    placeholder="Enter your name"
-                    required
-                  />
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="small-form-role">Role</FieldLabel>
-                  <Select defaultValue={null} items={roleItems}>
-                    <SelectTrigger id="small-form-role">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {roleItems.map((item) => (
-                          <SelectItem key={item.value} value={item.value}>
-                            {item.label}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </Field>
-              </div>
+          <Form>
+            <div className="grid grid-cols-2 gap-4">
               <Field>
-                <FieldLabel htmlFor="small-form-framework">
-                  Framework
-                </FieldLabel>
-                <Combobox items={frameworks}>
-                  <ComboboxInput
-                    id="small-form-framework"
-                    placeholder="Select a framework"
-                    required
-                  />
-                  <ComboboxContent>
-                    <ComboboxEmpty>No frameworks found.</ComboboxEmpty>
-                    <ComboboxList>
-                      {(item) => (
-                        <ComboboxItem key={item} value={item}>
-                          {item}
-                        </ComboboxItem>
-                      )}
-                    </ComboboxList>
-                  </ComboboxContent>
-                </Combobox>
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="small-form-comments">Comments</FieldLabel>
-                <Textarea
-                  id="small-form-comments"
-                  placeholder="Add any additional comments"
+                <FieldLabel htmlFor="small-form-name">Name</FieldLabel>
+                <Input
+                  id="small-form-name"
+                  placeholder="Enter your name"
+                  required
                 />
+                <FieldError />
               </Field>
-              <Field orientation="horizontal">
-                <Button type="submit">Submit</Button>
-                <Button type="button" variant="outline">
-                  Cancel
-                </Button>
+              <Field>
+                <FieldLabel htmlFor="small-form-role">Role</FieldLabel>
+                <Select defaultValue={null} items={roleItems}>
+                  <SelectTrigger id="small-form-role">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {roleItems.map((item) => (
+                        <SelectItem key={item.value} value={item.value}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <FieldError />
               </Field>
-            </FieldGroup>
-          </form>
+            </div>
+            <Field>
+              <FieldLabel htmlFor="small-form-framework">Framework</FieldLabel>
+              <Combobox items={frameworks}>
+                <ComboboxInput
+                  id="small-form-framework"
+                  placeholder="Select a framework"
+                  required
+                />
+                <ComboboxPopup>
+                  <ComboboxEmpty>No frameworks found.</ComboboxEmpty>
+                  <ComboboxList>
+                    {(item) => (
+                      <ComboboxItem key={item} value={item}>
+                        {item}
+                      </ComboboxItem>
+                    )}
+                  </ComboboxList>
+                </ComboboxPopup>
+              </Combobox>
+              <FieldError />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="small-form-comments">Comments</FieldLabel>
+              <Textarea
+                id="small-form-comments"
+                placeholder="Add any additional comments"
+              />
+              <FieldError />
+            </Field>
+            <div className="flex justify-end gap-2">
+              <Button type="submit">Submit</Button>
+              <Button type="button" variant="outline">
+                Cancel
+              </Button>
+            </div>
+          </Form>
         </CardContent>
       </Card>
     </Example>
