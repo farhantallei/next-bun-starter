@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/combobox"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Form } from "@/components/ui/form"
+import DataSelect from "./data-select"
 
 export function ComponentExample() {
   return (
@@ -45,7 +46,19 @@ function FormExample() {
           <CardDescription>Please fill in your details below</CardDescription>
         </CardHeader>
         <CardContent>
-          <Form>
+          <Form
+            action={(formData) => {
+              console.log("submitted")
+              for (const [key, value] of formData.entries()) {
+                console.log(key, value)
+              }
+            }}
+          >
+            <Field name="test">
+              <FieldLabel>Test</FieldLabel>
+              <DataSelect />
+            </Field>
+
             <Field>
               <FieldLabel htmlFor="small-form-framework">Framework</FieldLabel>
               <Combobox items={frameworks}>

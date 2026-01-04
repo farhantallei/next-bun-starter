@@ -1,10 +1,23 @@
 import { describe, expect, it } from "bun:test"
 
-import { cn, getPathname } from "./utils"
+import { buildQueryParams, cn, getPathname } from "./utils"
 
 describe("cn utility function", () => {
   it("merges classes", () => {
     expect(cn("text-sm", null, "text-lg")).toBe("text-lg")
+  })
+})
+
+describe("buildQueryParams utility function", () => {
+  it("builds query params correctly", () => {
+    expect(
+      buildQueryParams({
+        a: 1,
+        b: null,
+        c: "hello world",
+        arr: [1, 2],
+      }),
+    ).toBe("?a=1&c=hello%20world&arr=1&arr=2")
   })
 })
 

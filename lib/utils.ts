@@ -1,8 +1,18 @@
 import { type ClassValue, clsx } from "clsx"
+import qs from "qs"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
+}
+
+export function buildQueryParams(params: object) {
+  return qs.stringify(params, {
+    skipNulls: true,
+    encode: true,
+    addQueryPrefix: true,
+    arrayFormat: "repeat",
+  })
 }
 
 export function getPathname(...endpoint: string[]) {
