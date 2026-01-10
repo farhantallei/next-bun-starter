@@ -2,8 +2,8 @@ import { Alert02Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { createContext, use, useEffect, useId, useState } from "react"
-
 import { useInView } from "react-intersection-observer"
+
 import { getPaginatedData } from "@/features/examples/api"
 import useDebounceValue from "@/hooks/use-debounce-value"
 
@@ -97,7 +97,8 @@ function DataSelectContent() {
 
   return (
     <ComboboxPopup>
-      {status === "success" && data.pages.length <= 0 ? (
+      {status === "success" &&
+      (data.pages.length <= 0 || data.pages[0].data.length <= 0) ? (
         <ComboboxEmpty>No items found.</ComboboxEmpty>
       ) : null}
       <ComboboxList>
