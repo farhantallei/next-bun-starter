@@ -57,9 +57,10 @@ function FormExample() {
             <Field name="test">
               <FieldLabel>Test</FieldLabel>
               <DataSelect />
+              <FieldError />
             </Field>
 
-            <Field>
+            <Field name="framework">
               <FieldLabel htmlFor="small-form-framework">Framework</FieldLabel>
               <Combobox items={frameworks}>
                 <ComboboxInput

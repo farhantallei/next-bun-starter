@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 
+import type { ItemExample } from "@/features/examples/types"
 import type { PanigatedResponse } from "@/types/response"
 
 const generateDummyData = (page: number, limit: number, search?: string) => {
@@ -34,13 +35,6 @@ const generateDummyData = (page: number, limit: number, search?: string) => {
     totalItems,
     totalPages,
   }
-}
-
-export type ItemExample = {
-  id: number
-  title: string
-  description: string
-  createdAt: string
 }
 
 export async function GET(request: NextRequest) {

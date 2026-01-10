@@ -8,14 +8,14 @@ import { getPaginatedData } from "@/features/examples/api"
 import useDebounceValue from "@/hooks/use-debounce-value"
 
 import {
-  Autocomplete,
-  AutocompleteEmpty,
-  AutocompleteInput,
-  AutocompleteItem,
-  AutocompleteList,
-  AutocompletePopup,
-  AutocompleteStatus,
-} from "./ui/autocomplete"
+  Combobox,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxPopup,
+  ComboboxStatus,
+} from "./ui/combobox"
 import { Spinner } from "./ui/spinner"
 
 type DataSelectContextValue = {
@@ -32,15 +32,23 @@ export default function DataSelect() {
 
   return (
     <DataSelectContext.Provider value={{ search, setSearch }}>
-      <Autocomplete openOnInputClick>
-        <AutocompleteInput
+      <Combobox<{ id: string; title: string }>
+        itemToStringLabel={(item) => item.title}
+        itemToStringValue={(item) => item.id}
+        onOpenChange={(open) => {
+          if (!open) setSearch("")
+        }}
+        onValueChange={() => void setSearch("")}
+        openOnInputClick
+      >
+        <ComboboxInput
           aria-label="Search items"
           onChange={(e) => void setSearch(e.target.value)}
           placeholder="Search items…"
-          value={search}
+          showClear
         />
         <DataSelectContent />
-      </Autocomplete>
+      </Combobox>
     </DataSelectContext.Provider>
   )
 }
@@ -70,7 +78,7 @@ function DataSelectContent() {
       },
     ],
     queryFn: (props) =>
-      getPaginatedData({ page: props.pageParam, limit: 10, search }),
+      getPaginatedData({ page: props.pageParam, limit: 30, search }),
     getNextPageParam: (lastPage) => {
       if (lastPage.pagination.hasNextPage) {
         return lastPage.pagination.page + 1
@@ -88,39 +96,39 @@ function DataSelectContent() {
   }, [inView])
 
   return (
-    <AutocompletePopup>
+    <ComboboxPopup>
       {status === "success" && data.pages.length <= 0 ? (
-        <AutocompleteEmpty>No items found.</AutocompleteEmpty>
+        <ComboboxEmpty>No items found.</ComboboxEmpty>
       ) : null}
-      <AutocompleteList>
+      <ComboboxList>
         {status === "success" && data.pages.length > 0
           ? data.pages.map((page) =>
               page.data.map((data) => (
-                <AutocompleteItem key={data.id} value={data.id}>
+                <ComboboxItem key={data.id} value={data}>
                   {data.title}
-                </AutocompleteItem>
+                </ComboboxItem>
               )),
             )
           : null}
         {hasNextPage ? (
-          <AutocompleteStatus
+          <ComboboxStatus
             render={<div ref={!isFetchingNextPage ? loadingRef : null} />}
           >
             <DataSelectSearching />
-          </AutocompleteStatus>
+          </ComboboxStatus>
         ) : null}
-      </AutocompleteList>
+      </ComboboxList>
       {isLoading ? (
-        <AutocompleteStatus>
+        <ComboboxStatus>
           <DataSelectSearching />
-        </AutocompleteStatus>
+        </ComboboxStatus>
       ) : null}
       {isError ? (
-        <AutocompleteStatus>
+        <ComboboxStatus>
           <DataSelectError />
-        </AutocompleteStatus>
+        </ComboboxStatus>
       ) : null}
-    </AutocompletePopup>
+    </ComboboxPopup>
   )
 }
 
