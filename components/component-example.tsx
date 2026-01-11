@@ -1,5 +1,7 @@
 "use client"
 
+import { useState } from "react"
+
 import { Example, ExampleWrapper } from "@/components/example"
 import { Button } from "@/components/ui/button"
 import {
@@ -20,6 +22,7 @@ import {
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Form } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
+import { submitEditorAction } from "@/features/editor/actions"
 
 export function ComponentExample() {
   return (
@@ -38,6 +41,8 @@ const frameworks = [
 ] as const
 
 function FormExample() {
+  const [errors, setErrors] = useState<Record<string, string[]>>({})
+
   return (
     <Example containerClassName="col-span-2" title="Form">
       <Card className="w-full">
@@ -46,7 +51,26 @@ function FormExample() {
           <CardDescription>Please fill in your details below</CardDescription>
         </CardHeader>
         <CardContent>
-          <Form>
+          <Form
+            errors={errors}
+            onSubmit={async (e) => {
+              e.preventDefault()
+
+              const formData = new FormData(e.currentTarget)
+
+              const result = await submitEditorAction(formData)
+
+              if (result.error) {
+                if (typeof result.error === "string") {
+                  console.debug(result.error)
+                } else {
+                  setErrors(result.error.fieldErrors)
+                }
+              }
+
+              window.alert(JSON.stringify(result.data, null, 2))
+            }}
+          >
             <Field>
               <FieldLabel htmlFor="small-form-framework">Framework</FieldLabel>
               <Combobox items={frameworks}>
