@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 
+import { RichEditor, SimpleEditor } from "@/components/editor"
 import { Example, ExampleWrapper } from "@/components/example"
 import { Button } from "@/components/ui/button"
 import {
@@ -11,17 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Combobox,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-  ComboboxPopup,
-} from "@/components/ui/combobox"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Form } from "@/components/ui/form"
-import { Textarea } from "@/components/ui/textarea"
 import { submitEditorAction } from "@/features/editor/actions"
 
 export function ComponentExample() {
@@ -31,14 +23,6 @@ export function ComponentExample() {
     </ExampleWrapper>
   )
 }
-
-const frameworks = [
-  "Next.js",
-  "SvelteKit",
-  "Nuxt.js",
-  "Remix",
-  "Astro",
-] as const
 
 function FormExample() {
   const [errors, setErrors] = useState<Record<string, string[]>>({})
@@ -66,37 +50,25 @@ function FormExample() {
                 } else {
                   setErrors(result.error.fieldErrors)
                 }
+                return
               }
 
               window.alert(JSON.stringify(result.data, null, 2))
             }}
           >
-            <Field>
-              <FieldLabel htmlFor="small-form-framework">Framework</FieldLabel>
-              <Combobox items={frameworks}>
-                <ComboboxInput
-                  id="small-form-framework"
-                  placeholder="Select a framework"
-                  required
-                />
-                <ComboboxPopup>
-                  <ComboboxEmpty>No frameworks found.</ComboboxEmpty>
-                  <ComboboxList>
-                    {(item) => (
-                      <ComboboxItem key={item} value={item}>
-                        {item}
-                      </ComboboxItem>
-                    )}
-                  </ComboboxList>
-                </ComboboxPopup>
-              </Combobox>
+            <Field name="simpleEditor">
+              <FieldLabel>Simple Editor</FieldLabel>
+              <SimpleEditor
+                name="simpleEditor"
+                placeholder="Write with basic formatting..."
+              />
               <FieldError />
             </Field>
-            <Field>
-              <FieldLabel htmlFor="small-form-comments">Comments</FieldLabel>
-              <Textarea
-                id="small-form-comments"
-                placeholder="Add any additional comments"
+            <Field name="richEditor">
+              <FieldLabel>Rich Editor</FieldLabel>
+              <RichEditor
+                name="richEditor"
+                placeholder="Write with rich formatting..."
               />
               <FieldError />
             </Field>
