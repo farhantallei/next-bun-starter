@@ -1,5 +1,7 @@
 "use client"
 
+import { useState } from "react"
+
 import { Example, ExampleWrapper } from "@/components/example"
 import { Button } from "@/components/ui/button"
 import {
@@ -9,21 +11,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Combobox,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-  ComboboxPopup,
-} from "@/components/ui/combobox"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Form } from "@/components/ui/form"
-import { getPaginatedData } from "@/features/examples/api"
-import type { ItemExample } from "@/features/examples/types"
-import type { PanigatedResponse } from "@/types/response"
+import {
+  getNusaDistricts,
+  getNusaProvinces,
+  getNusaRegencies,
+  getNusaVillages,
+} from "@/features/nusa/api"
+import type {
+  NusaDistrictModel,
+  NusaProvinceModel,
+  NusaRegencyModel,
+  NusaVillageModel,
+} from "@/features/nusa/types"
 
-import { InfiniteCombobox } from "./ui/infinite-combobox"
+import { AsyncCombobox } from "./ui/async-combobox"
+import { InputDisplay } from "./ui/input-display"
 
 export function ComponentExample() {
   return (
@@ -33,21 +37,18 @@ export function ComponentExample() {
   )
 }
 
-const frameworks = [
-  "Next.js",
-  "SvelteKit",
-  "Nuxt.js",
-  "Remix",
-  "Astro",
-] as const
-
 function FormExample() {
+  const [province, setProvince] = useState<NusaProvinceModel | null>(null)
+  const [regency, setRegency] = useState<NusaRegencyModel | null>(null)
+  const [district, setDistrict] = useState<NusaDistrictModel | null>(null)
+  const [village, setVillage] = useState<NusaVillageModel | null>(null)
+
   return (
     <Example containerClassName="col-span-2 lg:max-w-md" title="Form">
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>User Information</CardTitle>
-          <CardDescription>Please fill in your details below</CardDescription>
+          <CardTitle>Address</CardTitle>
+          <CardDescription>Enter your complete address</CardDescription>
         </CardHeader>
         <CardContent>
           <Form
@@ -58,52 +59,110 @@ function FormExample() {
               }
             }}
           >
-            <Field name="test">
-              <FieldLabel>Test</FieldLabel>
-              <InfiniteCombobox<ItemExample, PanigatedResponse<ItemExample>>
-                ariaLabel="Search items"
-                getItems={(response) => response.data}
-                getNextPageParam={(lastPage) =>
-                  lastPage.pagination.hasNextPage
-                    ? lastPage.pagination.page + 1
-                    : undefined
-                }
-                itemToStringLabel={(item) => item.title}
-                itemToStringValue={(item) => `${item.id}`}
-                placeholder="Search items..."
-                queryFn={({ page, search }) =>
-                  getPaginatedData({ page, limit: 30, search })
-                }
-                queryKey={["data-select"]}
+            <Field name="province">
+              <FieldLabel>Provinsi</FieldLabel>
+              <AsyncCombobox<NusaProvinceModel>
+                ariaLabel="Search provinsi"
+                itemToStringLabel={(item) => item.name}
+                itemToStringValue={(item) => item.code}
+                onValueChange={(val) => {
+                  setProvince(val)
+                  setRegency(null)
+                  setDistrict(null)
+                  setVillage(null)
+                }}
+                placeholder="Search provinsi..."
+                queryFn={getNusaProvinces}
+                queryKey={["nusa-provinces"]}
                 required
+                triggerPlaceholder="Select provinsi"
                 useTrigger
+                value={province}
               />
               <FieldError />
             </Field>
 
-            <Field name="framework">
-              <FieldLabel htmlFor="small-form-framework">Framework</FieldLabel>
-              <Combobox items={frameworks}>
-                <ComboboxInput
-                  id="small-form-framework"
-                  placeholder="Select a framework"
+            <Field name="regency">
+              <FieldLabel>Kabupaten/Kota</FieldLabel>
+              {province ? (
+                <AsyncCombobox<NusaRegencyModel>
+                  ariaLabel="Search kabupaten/kota"
+                  itemToStringLabel={(item) => item.name}
+                  itemToStringValue={(item) => item.code}
+                  onValueChange={(val) => {
+                    setRegency(val)
+                    setDistrict(null)
+                    setVillage(null)
+                  }}
+                  placeholder="Search kabupaten/kota..."
+                  queryFn={() =>
+                    getNusaRegencies(province.code).then((r) => r.regencies)
+                  }
+                  queryKey={["nusa-regencies", province.code]}
                   required
+                  triggerPlaceholder="Select kabupaten/kota"
+                  useTrigger
+                  value={regency}
                 />
-                <ComboboxPopup>
-                  <ComboboxEmpty>No frameworks found.</ComboboxEmpty>
-                  <ComboboxList>
-                    {(item) => (
-                      <ComboboxItem key={item} value={item}>
-                        {item}
-                      </ComboboxItem>
-                    )}
-                  </ComboboxList>
-                </ComboboxPopup>
-              </Combobox>
+              ) : (
+                <InputDisplay>Select provinsi first</InputDisplay>
+              )}
               <FieldError />
             </Field>
+
+            <Field name="district">
+              <FieldLabel>Kecamatan</FieldLabel>
+              {regency ? (
+                <AsyncCombobox<NusaDistrictModel>
+                  ariaLabel="Search kecamatan"
+                  itemToStringLabel={(item) => item.name}
+                  itemToStringValue={(item) => item.code}
+                  onValueChange={(val) => {
+                    setDistrict(val)
+                    setVillage(null)
+                  }}
+                  placeholder="Search kecamatan..."
+                  queryFn={() =>
+                    getNusaDistricts(regency.code).then((r) => r.districts)
+                  }
+                  queryKey={["nusa-districts", regency.code]}
+                  required
+                  triggerPlaceholder="Select kecamatan"
+                  useTrigger
+                  value={district}
+                />
+              ) : (
+                <InputDisplay>Select kabupaten/kota first</InputDisplay>
+              )}
+              <FieldError />
+            </Field>
+
+            <Field name="village">
+              <FieldLabel>Kelurahan</FieldLabel>
+              {district ? (
+                <AsyncCombobox<NusaVillageModel>
+                  ariaLabel="Search kelurahan"
+                  itemToStringLabel={(item) => item.name}
+                  itemToStringValue={(item) => item.code}
+                  onValueChange={setVillage}
+                  placeholder="Search kelurahan..."
+                  queryFn={() =>
+                    getNusaVillages(district.code).then((r) => r.villages)
+                  }
+                  queryKey={["nusa-villages", district.code]}
+                  required
+                  triggerPlaceholder="Select kelurahan"
+                  useTrigger
+                  value={village}
+                />
+              ) : (
+                <InputDisplay>Select kecamatan first</InputDisplay>
+              )}
+              <FieldError />
+            </Field>
+
             <div className="flex justify-end gap-2">
-              <Button type="submit">Submit</Button>
+              <Button type="submit">Save</Button>
               <Button type="button" variant="outline">
                 Cancel
               </Button>

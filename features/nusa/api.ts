@@ -1,4 +1,3 @@
-import { env } from "@/data/env/client"
 import { createFetcher } from "@/lib/fetcher"
 
 import type {
@@ -9,7 +8,7 @@ import type {
   NusaVillageModel,
 } from "./types"
 
-const fetcher = createFetcher(env.NEXT_PUBLIC_NUSA_API_URL)
+const fetcher = createFetcher("/api/nusa")
 
 export async function getNusaProvinces() {
   return fetcher<NusaProvinceModel[]>()()
@@ -24,19 +23,20 @@ export async function getNusaRegencies(provinceCode: string) {
 export async function getNusaDistricts(regencyCode: string) {
   return fetcher<
     NusaBaseModel<{ province_code: string; districts: NusaDistrictModel[] }>
-  >(regencyCode.replace(".", "/"))()
+  >(regencyCode.replaceAll(".", "/"))()
 }
 
 export async function getNusaVillages(districtCode: string) {
+  console.log(districtCode)
   return fetcher<
     NusaBaseModel<{
       province_code: string
       regency_code: string
       villages: NusaVillageModel[]
     }>
-  >(districtCode.replace(".", "/"))()
+  >(districtCode.replaceAll(".", "/"))()
 }
 
 export async function getNusaVillageByCode(villageCode: string) {
-  return fetcher<NusaVillageModel>(villageCode.replace(".", "/"))()
+  return fetcher<NusaVillageModel>(villageCode.replaceAll(".", "/"))()
 }
