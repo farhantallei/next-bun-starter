@@ -21,6 +21,7 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Form } from "@/components/ui/form"
 import { getPaginatedData } from "@/features/examples/api"
 import type { ItemExample } from "@/features/examples/types"
+import type { PanigatedResponse } from "@/types/response"
 
 import { InfiniteCombobox } from "./ui/infinite-combobox"
 
@@ -53,14 +54,20 @@ function FormExample() {
             action={(formData) => {
               console.log("submitted")
               for (const [key, value] of formData.entries()) {
-                console.log(key, value)
+                console.log(key, value || "empty")
               }
             }}
           >
             <Field name="test">
               <FieldLabel>Test</FieldLabel>
-              <InfiniteCombobox<ItemExample>
+              <InfiniteCombobox<ItemExample, PanigatedResponse<ItemExample>>
                 ariaLabel="Search items"
+                getItems={(response) => response.data}
+                getNextPageParam={(lastPage) =>
+                  lastPage.pagination.hasNextPage
+                    ? lastPage.pagination.page + 1
+                    : undefined
+                }
                 itemToStringLabel={(item) => item.title}
                 itemToStringValue={(item) => `${item.id}`}
                 placeholder="Search items..."
@@ -68,6 +75,7 @@ function FormExample() {
                   getPaginatedData({ page, limit: 30, search })
                 }
                 queryKey={["data-select"]}
+                required
                 useTrigger
               />
               <FieldError />
