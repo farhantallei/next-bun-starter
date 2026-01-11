@@ -19,7 +19,10 @@ import {
 } from "@/components/ui/combobox"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Form } from "@/components/ui/form"
-import DataSelect from "./data-select"
+import { getPaginatedData } from "@/features/examples/api"
+import type { ItemExample } from "@/features/examples/types"
+
+import { InfiniteCombobox } from "./ui/infinite-combobox"
 
 export function ComponentExample() {
   return (
@@ -56,7 +59,17 @@ function FormExample() {
           >
             <Field name="test">
               <FieldLabel>Test</FieldLabel>
-              <DataSelect />
+              <InfiniteCombobox<ItemExample>
+                ariaLabel="Search items"
+                itemToStringLabel={(item) => item.title}
+                itemToStringValue={(item) => `${item.id}`}
+                placeholder="Search items..."
+                queryFn={({ page, search }) =>
+                  getPaginatedData({ page, limit: 30, search })
+                }
+                queryKey={["data-select"]}
+                useTrigger
+              />
               <FieldError />
             </Field>
 
