@@ -72,6 +72,11 @@ describe("getPathname utility function", () => {
     expect(getPathname("api", "users", "")).toBe("/api/users")
   })
 
+  // No arguments (empty array)
+  it("should handle no arguments", () => {
+    expect(getPathname()).toBe("")
+  })
+
   // Multiple consecutive slashes
   it("should handle multiple consecutive slashes", () => {
     expect(getPathname("api", "//users")).toBe("/api/users")
