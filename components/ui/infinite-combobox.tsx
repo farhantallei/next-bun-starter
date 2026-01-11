@@ -30,26 +30,17 @@ import {
 } from "./combobox"
 import { Spinner } from "./spinner"
 
-interface PaginatedResponse<T> {
-  data: T[]
-  pagination: {
-    hasNextPage: boolean
-    page: number
-  }
-}
-
-interface InfiniteComboboxProps<T> {
+interface InfiniteComboboxProps<T, TResponse> {
   queryKey: QueryKey
-  queryFn: (params: {
-    page: number
-    search: string
-  }) => Promise<PaginatedResponse<T>>
+  queryFn: (params: { page: number; search: string }) => Promise<TResponse>
+  getItems: (response: TResponse) => T[]
+  getNextPageParam: (lastPage: TResponse) => number | undefined
   itemToStringLabel: (item: T) => string
   itemToStringValue: (item: T) => string
   renderItem?: (item: T) => ReactNode
   placeholder?: string
   ariaLabel?: string
-  limit?: number
+  initialPageParam?: number
   debounceMs?: number
   emptyMessage?: string
   searchingMessage?: string
@@ -57,19 +48,23 @@ interface InfiniteComboboxProps<T> {
   value?: T | null
   onValueChange?: (value: T | null) => void
   disabled?: boolean
+  required?: boolean
   showClear?: boolean
   useTrigger?: boolean
   triggerPlaceholder?: string
 }
 
-export function InfiniteCombobox<T>({
+export function InfiniteCombobox<T, TResponse>({
   queryKey,
   queryFn,
+  getItems,
+  getNextPageParam,
   itemToStringLabel,
   itemToStringValue,
   renderItem,
   placeholder = "Search...",
   ariaLabel = "Search items",
+  initialPageParam = 1,
   debounceMs = 300,
   emptyMessage = "No items found.",
   searchingMessage = "Searching...",
@@ -77,10 +72,11 @@ export function InfiniteCombobox<T>({
   value,
   onValueChange,
   disabled = false,
+  required = false,
   showClear = true,
   useTrigger = false,
   triggerPlaceholder = "Select an item",
-}: InfiniteComboboxProps<T>) {
+}: InfiniteComboboxProps<T, TResponse>) {
   const id = useId()
 
   const [search, setSearch] = useState("")
@@ -96,21 +92,16 @@ export function InfiniteCombobox<T>({
     hasNextPage,
     fetchNextPage,
   } = useInfiniteQuery<
-    PaginatedResponse<T>,
+    TResponse,
     Error,
-    InfiniteData<PaginatedResponse<T>>,
+    InfiniteData<TResponse>,
     QueryKey,
     number
   >({
     queryKey: [id, ...queryKey, { keyword: debouncedSearch }],
     queryFn: ({ pageParam }) => queryFn({ page: pageParam, search }),
-    getNextPageParam: (lastPage) => {
-      if (lastPage.pagination.hasNextPage) {
-        return lastPage.pagination.page + 1
-      }
-      return undefined
-    },
-    initialPageParam: 1,
+    getNextPageParam,
+    initialPageParam,
   })
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: we only want this to run when inView changes
@@ -122,7 +113,7 @@ export function InfiniteCombobox<T>({
 
   const isEmpty =
     status === "success" &&
-    (data.pages.length <= 0 || data.pages[0].data.length <= 0)
+    (data.pages.length <= 0 || getItems(data.pages[0]).length <= 0)
 
   const hasData = status === "success" && data.pages.length > 0
 
@@ -139,6 +130,7 @@ export function InfiniteCombobox<T>({
         onValueChange?.(newValue)
       }}
       openOnInputClick={!useTrigger}
+      required={required}
       value={value}
     >
       {useTrigger ? (
@@ -190,7 +182,7 @@ export function InfiniteCombobox<T>({
           ) : null}
           {hasData
             ? data.pages.flatMap((page) =>
-                page.data.map((item) => (
+                getItems(page).map((item) => (
                   <ComboboxItem key={itemToStringValue(item)} value={item}>
                     {renderItem ? renderItem(item) : itemToStringLabel(item)}
                   </ComboboxItem>
