@@ -27,7 +27,6 @@ export async function getNusaDistricts(regencyCode: string) {
 }
 
 export async function getNusaVillages(districtCode: string) {
-  console.log(districtCode)
   return fetcher<
     NusaBaseModel<{
       province_code: string
