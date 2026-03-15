@@ -34,7 +34,12 @@ interface InfiniteComboboxProps<T, TResponse> {
   queryKey: QueryKey
   queryFn: (params: { page: number; search: string }) => Promise<TResponse>
   getItems: (response: TResponse) => T[]
-  getNextPageParam: (lastPage: TResponse) => number | undefined
+  getNextPageParam: (
+    lastPage: TResponse,
+    allPages: TResponse[],
+    lastPageParam: number,
+    allPageParams: number[],
+  ) => number | null | undefined
   itemToStringLabel: (item: T) => string
   itemToStringValue: (item: T) => string
   renderItem?: (item: T) => ReactNode
