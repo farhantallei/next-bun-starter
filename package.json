@@ -11,6 +11,7 @@
     "format:unsafe": "biome check --write --unsafe",
     "clean": "rm -rf .next *.tsbuildinfo",
     "clean:node_modules": "rm -rf .next node_modules *.tsbuildinfo",
+    "typecheck": "tsc --noEmit",
     "healthcheck": "bun scripts/healthcheck.ts"
   },
   "dependencies": {
