@@ -10,6 +10,5 @@ export default function useDebounce(
   const { clear, reset } = useTimeout(callback, ms)
   // biome-ignore lint/correctness/useExhaustiveDependencies: we want this to run only when deps change
   useEffect(reset, [...deps, reset])
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(clear, [])
 }

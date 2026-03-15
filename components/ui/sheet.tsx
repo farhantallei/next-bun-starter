@@ -1,25 +1,32 @@
 "use client";
 
 import { Dialog as SheetPrimitive } from "@base-ui/react/dialog";
-import { Cancel01Icon } from "@hugeicons/core-free-icons"
-import { HugeiconsIcon } from "@hugeicons/react"
+import { XIcon } from "lucide-react";
+import type React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const Sheet = SheetPrimitive.Root;
+export const Sheet: typeof SheetPrimitive.Root = SheetPrimitive.Root;
 
-const SheetPortal = SheetPrimitive.Portal;
+export const SheetPortal: typeof SheetPrimitive.Portal = SheetPrimitive.Portal;
 
-function SheetTrigger(props: SheetPrimitive.Trigger.Props) {
+export function SheetTrigger(
+  props: SheetPrimitive.Trigger.Props,
+): React.ReactElement {
   return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />;
 }
 
-function SheetClose(props: SheetPrimitive.Close.Props) {
+export function SheetClose(
+  props: SheetPrimitive.Close.Props,
+): React.ReactElement {
   return <SheetPrimitive.Close data-slot="sheet-close" {...props} />;
 }
 
-function SheetBackdrop({ className, ...props }: SheetPrimitive.Backdrop.Props) {
+export function SheetBackdrop({
+  className,
+  ...props
+}: SheetPrimitive.Backdrop.Props): React.ReactElement {
   return (
     <SheetPrimitive.Backdrop
       className={cn(
@@ -32,15 +39,15 @@ function SheetBackdrop({ className, ...props }: SheetPrimitive.Backdrop.Props) {
   );
 }
 
-function SheetViewport({
+export function SheetViewport({
   className,
   side,
-  inset = false,
+  variant = "default",
   ...props
 }: SheetPrimitive.Viewport.Props & {
   side?: "right" | "left" | "top" | "bottom";
-  inset?: boolean;
-}) {
+  variant?: "default" | "inset";
+}): React.ReactElement {
   return (
     <SheetPrimitive.Viewport
       className={cn(
@@ -49,7 +56,7 @@ function SheetViewport({
         side === "top" && "grid grid-rows-[auto_1fr] pb-12",
         side === "left" && "flex justify-start",
         side === "right" && "flex justify-end",
-        inset && "sm:p-4",
+        variant === "inset" && "sm:p-4",
       )}
       data-slot="sheet-viewport"
       {...props}
@@ -57,34 +64,36 @@ function SheetViewport({
   );
 }
 
-function SheetPopup({
+export function SheetPopup({
   className,
   children,
   showCloseButton = true,
   side = "right",
-  inset = false,
+  variant = "default",
+  closeProps,
   ...props
 }: SheetPrimitive.Popup.Props & {
   showCloseButton?: boolean;
   side?: "right" | "left" | "top" | "bottom";
-  inset?: boolean;
-}) {
+  variant?: "default" | "inset";
+  closeProps?: SheetPrimitive.Close.Props;
+}): React.ReactElement {
   return (
     <SheetPortal>
       <SheetBackdrop />
-      <SheetViewport inset={inset} side={side}>
+      <SheetViewport side={side} variant={variant}>
         <SheetPrimitive.Popup
           className={cn(
-            "relative flex max-h-full min-h-0 w-full min-w-0 flex-col bg-popover not-dark:bg-clip-padding text-popover-foreground shadow-lg/5 transition-[opacity,translate] duration-200 ease-in-out will-change-transform before:pointer-events-none before:absolute before:inset-0 before:shadow-[0_1px_--theme(--color-black/6%)] data-ending-style:opacity-0 data-starting-style:opacity-0 max-sm:before:hidden dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
+            "relative flex max-h-full min-h-0 w-full min-w-0 flex-col bg-popover not-dark:bg-clip-padding text-popover-foreground shadow-lg/5 transition-[opacity,translate] duration-200 ease-in-out will-change-transform before:pointer-events-none before:absolute before:inset-0 before:shadow-[0_1px_--theme(--color-black/4%)] data-ending-style:opacity-0 data-starting-style:opacity-0 max-sm:before:hidden dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
             side === "bottom" &&
               "row-start-2 border-t data-ending-style:translate-y-8 data-starting-style:translate-y-8",
             side === "top" &&
-              "data-ending-style:-translate-y-8 data-starting-style:-translate-y-8 border-b",
+              "border-b data-ending-style:-translate-y-8 data-starting-style:-translate-y-8",
             side === "left" &&
-              "data-ending-style:-translate-x-8 data-starting-style:-translate-x-8 w-[calc(100%-(--spacing(12)))] max-w-md border-e",
+              "w-[calc(100%-(--spacing(12)))] max-w-md border-e data-ending-style:-translate-x-8 data-starting-style:-translate-x-8",
             side === "right" &&
               "col-start-2 w-[calc(100%-(--spacing(12)))] max-w-md border-s data-ending-style:translate-x-8 data-starting-style:translate-x-8",
-            inset &&
+            variant === "inset" &&
               "before:hidden sm:rounded-2xl sm:border sm:before:rounded-[calc(var(--radius-2xl)-1px)] sm:**:data-[slot=sheet-footer]:rounded-b-[calc(var(--radius-2xl)-1px)]",
             className,
           )}
@@ -97,8 +106,9 @@ function SheetPopup({
               aria-label="Close"
               className="absolute end-2 top-2"
               render={<Button size="icon" variant="ghost" />}
+              {...closeProps}
             >
-              <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
+              <XIcon />
             </SheetPrimitive.Close>
           )}
         </SheetPrimitive.Popup>
@@ -107,7 +117,10 @@ function SheetPopup({
   );
 }
 
-function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
+export function SheetHeader({
+  className,
+  ...props
+}: React.ComponentProps<"div">): React.ReactElement {
   return (
     <div
       className={cn(
@@ -120,13 +133,13 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function SheetFooter({
+export function SheetFooter({
   className,
   variant = "default",
   ...props
 }: React.ComponentProps<"div"> & {
   variant?: "default" | "bare";
-}) {
+}): React.ReactElement {
   return (
     <div
       className={cn(
@@ -142,20 +155,26 @@ function SheetFooter({
   );
 }
 
-function SheetTitle({ className, ...props }: SheetPrimitive.Title.Props) {
+export function SheetTitle({
+  className,
+  ...props
+}: SheetPrimitive.Title.Props): React.ReactElement {
   return (
     <SheetPrimitive.Title
-      className={cn("font-heading text-xl leading-none", className)}
+      className={cn(
+        "font-heading font-semibold text-xl leading-none",
+        className,
+      )}
       data-slot="sheet-title"
       {...props}
     />
   );
 }
 
-function SheetDescription({
+export function SheetDescription({
   className,
   ...props
-}: SheetPrimitive.Description.Props) {
+}: SheetPrimitive.Description.Props): React.ReactElement {
   return (
     <SheetPrimitive.Description
       className={cn("text-muted-foreground text-sm", className)}
@@ -165,16 +184,16 @@ function SheetDescription({
   );
 }
 
-function SheetPanel({
+export function SheetPanel({
   className,
   scrollFade = true,
   ...props
-}: React.ComponentProps<"div"> & { scrollFade?: boolean }) {
+}: React.ComponentProps<"div"> & { scrollFade?: boolean }): React.ReactElement {
   return (
     <ScrollArea scrollFade={scrollFade}>
       <div
         className={cn(
-          "px-6 in-[[data-slot=sheet-popup]:has([data-slot=sheet-header])]:pt-1 in-[[data-slot=sheet-popup]:not(:has([data-slot=sheet-header]))]:pt-6 in-[[data-slot=sheet-popup]:not(:has([data-slot=sheet-footer]))]:pb-6! in-[[data-slot=sheet-popup]:not(:has([data-slot=sheet-footer].border-t))]:pb-1 pb-6",
+          "p-6 in-[[data-slot=sheet-popup]:has([data-slot=sheet-header])]:pt-1 in-[[data-slot=sheet-popup]:has([data-slot=sheet-footer]:not(.border-t))]:pb-1",
           className,
         )}
         data-slot="sheet-panel"
@@ -185,17 +204,7 @@ function SheetPanel({
 }
 
 export {
-  Sheet,
-  SheetTrigger,
-  SheetPortal,
-  SheetClose,
-  SheetBackdrop,
+  SheetPrimitive,
   SheetBackdrop as SheetOverlay,
-  SheetPopup,
   SheetPopup as SheetContent,
-  SheetHeader,
-  SheetFooter,
-  SheetTitle,
-  SheetDescription,
-  SheetPanel,
 };
