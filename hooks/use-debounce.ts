@@ -8,7 +8,7 @@ export default function useDebounce(
   ms: number = 1000,
 ) {
   const { clear, reset } = useTimeout(callback, ms)
-  // biome-ignore lint/correctness/useExhaustiveDependencies: we want this to run only when deps change
   useEffect(reset, [...deps, reset])
+  // biome-ignore lint/correctness/useExhaustiveDependencies: keep deps stay empty
   useEffect(clear, [])
 }
