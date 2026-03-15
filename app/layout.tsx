@@ -3,6 +3,8 @@ import { Geist, Geist_Mono, Inter } from "next/font/google"
 
 import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast"
 
+import PageProgress from "./_components/page-progress"
+import BProgressProvider from "./_providers/bprogress-provider"
 import TanstackQueryProvider from "./_providers/tanstack-query-provider"
 
 import "./globals.css"
@@ -41,11 +43,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ToastProvider>
-          <AnchoredToastProvider>
-            <TanstackQueryProvider>{children}</TanstackQueryProvider>
-          </AnchoredToastProvider>
-        </ToastProvider>
+        <BProgressProvider>
+          <PageProgress />
+          <TanstackQueryProvider>
+            <ToastProvider>
+              <AnchoredToastProvider>{children}</AnchoredToastProvider>
+            </ToastProvider>
+          </TanstackQueryProvider>
+        </BProgressProvider>
       </body>
     </html>
   )
