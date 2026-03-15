@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono, Inter } from "next/font/google"
 
 import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast"
@@ -18,6 +18,13 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 })
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  interactiveWidget: "resizes-content",
+}
 
 export const metadata: Metadata = {
   title: "Create Next App",
